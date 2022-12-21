@@ -44,35 +44,6 @@ class dame:
         self.couleur=couleur
 
 
-    def deplacement_droit(self, n=0, i=1, j=0):
-        y=self.position[0]
-        x=self.position[1]
-        legal=[]
-        l=[]
-        L=[]
-        i=0
-        while i<7:
-            if echiquier[y][i]==0:
-                l+=[y,i]
-            elif echiquier[y][i]==self:     #c'est self qu'il faut écrire ?
-                legal+=l
-                l=[]
-            else:
-                l=[]
-                if eval(echiquier[y][i]).couleur!=self.couleur:
-                    l.append([y,i])
-            if echiquier[i][x]==0:
-                L+=[i,x]
-            elif echiquier[i][x]==self:     #c'est self qu'il faut écrire ?
-                legal+=L
-                L=[]
-            else:
-                L=[]
-                if eval(echiquier[i][x]).couleur!=self.couleur:
-                    L.append([y,i])
-
-            i+=1
-
 
 
 
@@ -91,17 +62,67 @@ class dame:
         while x+i<=7 and echiquier[y][x+i]==0:
             legal.append([y,x+i])
             i+=1
-        if x+1<=7 and echiquier[y][x+i].couleur!=self.couleur:
+        if x+i<=7 and echiquier[y][x+i].couleur!=self.couleur:
             legal.append([y,x+i])
-            i=1
+        i=1
         while y-i>=0 and echiquier[y-i][x]==0:
             legal.append([y-i,x])
             i+=1
         if y-i>=0 and echiquier[y-i][x].couleur!=self.couleur:
             legal.append([y-i,x])
-        x=1
-        while y+i>=0 and echiquier[y+i][x]==0:
+        i=1
+        while y+i<=7 and echiquier[y+i][x]==0:
             legal.append([y+i,x])
             i+=1
-        if y+i>=0 and echiquier[y+i][x].couleur!=self.couleur:
+        if y+i<=7 and echiquier[y+i][x].couleur!=self.couleur:
             legal.append([y+i,x])
+        i=1
+        
+        
+        while y+i<=7 and x+i<=7 and echiquier[y+i][x+i]==0:
+                legal.append([y+i,x+i])
+                i+=1
+        if y+i<=7 and x+i<=7 and eval(echiquier[y+i,x+i]).couleur!=self.couleur:
+                legal.append([y+i,x+i])
+        i=1
+        while y-i>=0 and x-i>=0 and echiquier[y-i][x-i]==0:
+                legal.append([y-i,x-i])
+                i+=1
+        if y-i>=0 and x-i>=0 and eval(echiquier[y-i,x-i]).couleur!=self.couleur:
+                legal.append([y-i,x-i])
+        i=1
+        while y+i<=7 and x-i>=0 and echiquier[y+i][x-i]==0:
+                legal.append([y+i,x-i])
+                i+=1
+        if y+i<=7 and x-i>=0 and eval(echiquier[y+i,x-i]).couleur!=self.couleur:
+                legal.append([y+i,x-i])
+        i=1
+        while y-i>=0 and x+i<=7 and echiquier[y-i][x+i]==0:
+                legal.append([y-i,x+i])
+                i+=1
+        if y-i>=0 and x+i<=7 and eval(echiquier[y-i,x+i]).couleur!=self.couleur:
+                legal.append([y-i,x+i])
+        i=1
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
