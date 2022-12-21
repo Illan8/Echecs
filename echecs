@@ -1,0 +1,107 @@
+echiquier=[[0]*8]*8
+
+
+class pion:
+        def __init__(self, y, x, couleur=blanc):
+        self.position=[y,x]
+        self.__initial=(y,x) # on sait pas ce qu'on va faire
+        self.couleur=couleur
+
+    def mouvements(self):
+        y=self.position[0]
+        x=self.position[1]
+        legal=[]
+        if self.couleur==blanc
+            if y<7: #condition vrmt nécessaire ?
+                if echiquier[y+1][x]==0:
+                    legal.append([y+1,x])
+                    if self.__position==self.initial and echiquier[y+2][x]==0:
+                        legal.append([y+2,x])
+            if x!=0 and echiquier[y+1][x-1]!=0 and eval(echiquier[y+1][x-1]).couleur=='noir':
+                legal.append([y+1,x-1])
+            if x!=7 and echiquier[y+1][x+1]!=0 and eval(echiquier[y+1][x+1]).couleur=='noir':
+                legal.append([y+1,x+1])
+            #prise en passant à coder
+        else:
+            if y>0: #condition vrmt nécessaire ?
+                if echiquier[y-1][x]==0:
+                    legal.append([y-1,x])
+                    if self.__position==self.initial and echiquier[y-2][x]==0:
+                        legal.append([y-2,x])
+            if x!=0 and echiquier[y-1][x-1]!=0 and eval(echiquier[y-1][x-1]).couleur=='blanc':
+                legal.append([y-1,x-1])
+            if x!=7 and echiquier[y-1][x+1]!=0 and eval(echiquier[y-1][x+1]).couleur=='blanc':
+                legal.append([y-1,x+1])
+        return(legal)
+
+
+
+
+
+class dame:
+    def __init__(self, x, y, couleur):
+        self.position=[y,x]
+        self.couleur=couleur
+
+
+    def deplacement_droit(self, n=0, i=1, j=0):
+        y=self.position[0]
+        x=self.position[1]
+        legal=[]
+        l=[]
+        L=[]
+        i=0
+        while i<7:
+            if echiquier[y][i]==0:
+                l+=[y,i]
+            elif echiquier[y][i]==self:     #c'est self qu'il faut écrire ?
+                legal+=l
+                l=[]
+            else:
+                l=[]
+                if eval(echiquier[y][i]).couleur!=self.couleur:
+                    l.append([y,i])
+            if echiquier[i][x]==0:
+                L+=[i,x]
+            elif echiquier[i][x]==self:     #c'est self qu'il faut écrire ?
+                legal+=L
+                L=[]
+            else:
+                L=[]
+                if eval(echiquier[i][x]).couleur!=self.couleur:
+                    L.append([y,i])
+
+            i+=1
+
+
+
+
+
+    def mouvements(self):
+        y=self.position[0]
+        x=self.position[1]
+        legal=[]
+        i=1
+        while x-i>=0 and echiquier[y][x-i]==0:
+            legal.append([y,x-i])
+            i+=1
+        if x-i>=0 and echiquier[y][x-i].couleur!=self.couleur:
+            legal.append([y,x-i])
+        i=1
+        while x+i<=7 and echiquier[y][x+i]==0:
+            legal.append([y,x+i])
+            i+=1
+        if x+1<=7 and echiquier[y][x+i].couleur!=self.couleur:
+            legal.append([y,x+i])
+            i=1
+        while y-i>=0 and echiquier[y-i][x]==0:
+            legal.append([y-i,x])
+            i+=1
+        if y-i>=0 and echiquier[y-i][x].couleur!=self.couleur:
+            legal.append([y-i,x])
+        x=1
+        while y+i>=0 and echiquier[y+i][x]==0:
+            legal.append([y+i,x])
+            i+=1
+        if y+i>=0 and echiquier[y+i][x].couleur!=self.couleur:
+            legal.append([y+i,x])
