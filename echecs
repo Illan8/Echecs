@@ -103,10 +103,44 @@ class dame:
         if y-i>=0 and x+i<=7 and eval(echiquier[y-i,x+i]).couleur!=self.couleur:
                 legal.append([y-i,x+i])
         i=1
+        
+        return(legal)
                
-               
-               
-               
+class fou:
+        def __init__(self, x, y, couleur):
+        self.position=[y,x]
+        self.couleur=couleur
+        
+        def mouvement(self):
+                while y+i<=7 and x+i<=7 and echiquier[y+i][x+i]==0:
+                     legal.append([y+i,x+i])
+                     i+=1
+                if y+i<=7 and x+i<=7 and eval(echiquier[y+i,x+i]).couleur!=self.couleur:
+                        legal.append([y+i,x+i])
+                i=1
+                while y-i>=0 and x-i>=0 and echiquier[y-i][x-i]==0:
+                     legal.append([y-i,x-i])
+                     i+=1
+                if y-i>=0 and x-i>=0 and eval(echiquier[y-i,x-i]).couleur!=self.couleur:
+                     legal.append([y-i,x-i])
+                i=1
+                while y+i<=7 and x-i>=0 and echiquier[y+i][x-i]==0:
+                        legal.append([y+i,x-i])
+                        i+=1
+                if y+i<=7 and x-i>=0 and eval(echiquier[y+i,x-i]).couleur!=self.couleur:
+                        legal.append([y+i,x-i])
+                i=1
+                while y-i>=0 and x+i<=7 and echiquier[y-i][x+i]==0:
+                        legal.append([y-i,x+i])
+                        i+=1
+                if y-i>=0 and x+i<=7 and eval(echiquier[y-i,x+i]).couleur!=self.couleur:
+                        legal.append([y-i,x+i])
+                i=1
+                return(legal)
+              
+              
+              
+   
                
                
                
