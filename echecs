@@ -33,6 +33,18 @@ class pion:
             if x!=7 and echiquier[y-1][x+1]!=0 and eval(echiquier[y-1][x+1]).couleur=='blanc':
                 legal.append([y-1,x+1])
         return(legal)
+        
+    def menace(self):
+        y=self.position[0]
+        x=self.position[1]
+        Menace=[]
+        if 0<x:
+            Menace.append([y+1,x-1])
+        if 7>x:
+            Menace.append([y+1,x+1])
+            
+    
+    
 
 
 
@@ -111,40 +123,85 @@ class fou:
         self.position=[y,x]
         self.couleur=couleur
         
-        def mouvement(self):
-                while y+i<=7 and x+i<=7 and echiquier[y+i][x+i]==0:
-                     legal.append([y+i,x+i])
-                     i+=1
-                if y+i<=7 and x+i<=7 and eval(echiquier[y+i,x+i]).couleur!=self.couleur:
-                        legal.append([y+i,x+i])
-                i=1
-                while y-i>=0 and x-i>=0 and echiquier[y-i][x-i]==0:
-                     legal.append([y-i,x-i])
-                     i+=1
-                if y-i>=0 and x-i>=0 and eval(echiquier[y-i,x-i]).couleur!=self.couleur:
-                     legal.append([y-i,x-i])
-                i=1
-                while y+i<=7 and x-i>=0 and echiquier[y+i][x-i]==0:
-                        legal.append([y+i,x-i])
-                        i+=1
-                if y+i<=7 and x-i>=0 and eval(echiquier[y+i,x-i]).couleur!=self.couleur:
-                        legal.append([y+i,x-i])
-                i=1
-                while y-i>=0 and x+i<=7 and echiquier[y-i][x+i]==0:
-                        legal.append([y-i,x+i])
-                        i+=1
-                if y-i>=0 and x+i<=7 and eval(echiquier[y-i,x+i]).couleur!=self.couleur:
-                        legal.append([y-i,x+i])
-                i=1
-                return(legal)
-              
-              
-              
-   
+        def mouvements(self):
+            y=self.position[0]
+            x=self.position[1]
+            legal=[]
+            i=1
+            while y+i<=7 and x+i<=7 and echiquier[y+i][x+i]==0:
+                    legal.append([y+i,x+i])
+                    i+=1
+            if y+i<=7 and x+i<=7 and eval(echiquier[y+i,x+i]).couleur!=self.couleur:
+                    legal.append([y+i,x+i])
+            i=1
+            while y-i>=0 and x-i>=0 and echiquier[y-i][x-i]==0:
+                    legal.append([y-i,x-i])
+                    i+=1
+            if y-i>=0 and x-i>=0 and eval(echiquier[y-i,x-i]).couleur!=self.couleur:
+                    legal.append([y-i,x-i])
+            i=1
+            while y+i<=7 and x-i>=0 and echiquier[y+i][x-i]==0:
+                    legal.append([y+i,x-i])
+                    i+=1
+            if y+i<=7 and x-i>=0 and eval(echiquier[y+i,x-i]).couleur!=self.couleur:
+                    legal.append([y+i,x-i])
+            i=1
+            while y-i>=0 and x+i<=7 and echiquier[y-i][x+i]==0:
+                    legal.append([y-i,x+i])
+                    i+=1
+            if y-i>=0 and x+i<=7 and eval(echiquier[y-i,x+i]).couleur!=self.couleur:
+                    legal.append([y-i,x+i])
+            i=1
+            
+class tour:
+    def __init__(self, x, y, couleur):
+        self.position=[y,x]
+        self.couleur=couleur
+            
+    def mouvements(self):
+        y=self.position[0]
+        x=self.position[1]
+        legal=[]
+        i=1
+        while x-i>=0 and echiquier[y][x-i]==0:
+            legal.append([y,x-i])
+            i+=1
+        if x-i>=0 and echiquier[y][x-i].couleur!=self.couleur:
+            legal.append([y,x-i])
+        i=1
+        while x+i<=7 and echiquier[y][x+i]==0:
+            legal.append([y,x+i])
+            i+=1
+        if x+i<=7 and echiquier[y][x+i].couleur!=self.couleur:
+            legal.append([y,x+i])
+        i=1
+        while y-i>=0 and echiquier[y-i][x]==0:
+            legal.append([y-i,x])
+            i+=1
+        if y-i>=0 and echiquier[y-i][x].couleur!=self.couleur:
+            legal.append([y-i,x])
+        i=1
+        while y+i<=7 and echiquier[y+i][x]==0:
+            legal.append([y+i,x])
+            i+=1
+        if y+i<=7 and echiquier[y+i][x].couleur!=self.couleur:
+            legal.append([y+i,x])
+        i=1
+    #roque possible ?
+    
+    
+
                
+class roi:
+    def __init__(self, x, y, couleur):
+        self.position=[y,x]
+        self.couleur=couleur
                
-               
-               
+    def mouvements(self):
+        y=self.position[0]
+        x=self.position[1]
+        legal=[]
+                   
                
                
                
