@@ -2,7 +2,7 @@ echiquier=[[0]*8]*8
 
 
 class pion:
-        def __init__(self, y, x, couleur=blanc):
+    def __init__(self, y, x, couleur=blanc):
         self.position=[y,x]
         self.__initial=(y,x) # on sait pas ce qu'on va faire
         self.couleur=couleur
