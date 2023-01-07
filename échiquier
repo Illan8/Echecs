@@ -1,0 +1,152 @@
+from tkinter import *
+from tkinter import ttk
+
+
+Move=[]
+
+
+
+
+
+
+
+def move(case):
+    global Move
+    if len(Move)==2:
+        Move=[]
+    if len(Move)==0:
+        Move.append(case)
+    else:
+        if Move[0]==case:
+            Move=[]
+        else:
+            Move.append(case)
+    print(Move)
+    return (Move)
+
+
+def select(case):
+    i=case[0]
+    y=int(case[1])-1
+    x=ord(i)-ord('a')
+    print (f'{y} {x}')
+    return [y,x]
+
+
+
+
+
+
+
+board = Tk()
+board.title('Echecs')
+board.geometry("1155x808")
+case=[]
+liste=['a','b','c','d','e','f','g','h']
+for i in liste:
+    for j in range(8):
+        d=str(j+1)
+        c=f"{i}{d}"
+        case.append(c)
+
+for i in case:
+    select(i)
+
+
+
+
+a1=Button(board, bg='#f0d9b5', command=move('a1'))
+a2=Button(board, bg="#b58863",command=move('a2'))
+a3=Button(board, bg='#f0d9b5',command=move('a3'))
+a4=Button(board, bg="#b58863", command=move('a4'))
+a5=Button(board, bg='#f0d9b5', command=move('a5'))
+a6=Button(board, bg="#b58863", command=move('a6'))
+a7=Button(board, bg='#f0d9b5', command=move('a7'))
+a8=Button(board, bg="#b58863", command=move('a8'))
+b8=Button(board, bg='#f0d9b5', command=move('b8'))
+b7=Button(board, bg="#b58863", command=move('b7'))
+b6=Button(board, bg='#f0d9b5', command=move('b6'))
+b5=Button(board, bg="#b58863", command=move('b5'))
+b4=Button(board, bg='#f0d9b5', command=move('b4'))
+b3=Button(board, bg="#b58863", command=move('b3'))
+b2=Button(board, bg='#f0d9b5', command=move('b2'))
+b1=Button(board, bg="#b58863", command=move('b1'))
+c1=Button(board, bg='#f0d9b5', command=move('c1'))
+c2=Button(board, bg="#b58863", command=move('c2'))
+c3=Button(board, bg='#f0d9b5', command=move('c3'))
+c4=Button(board, bg="#b58863", command=move('c4'))
+c5=Button(board, bg='#f0d9b5', command=move('c5'))
+c6=Button(board, bg="#b58863", command=move('c6'))
+c7=Button(board, bg='#f0d9b5', command=move('c7'))
+c8=Button(board, bg="#b58863", command=move('c8'))
+d8=Button(board, bg='#f0d9b5', command=move('d8'))
+d7=Button(board, bg="#b58863", command=move('d7'))
+d6=Button(board, bg='#f0d9b5', command=move('d6'))
+d5=Button(board, bg="#b58863", command=move('d5'))
+d4=Button(board, bg='#f0d9b5', command=move('d4'))
+d3=Button(board, bg="#b58863", command=move('d3'))
+d2=Button(board, bg='#f0d9b5', command=move('d2'))
+d1=Button(board, bg="#b58863", command=move('d1'))
+e1=Button(board, bg='#f0d9b5', command=move('e1'))
+e2=Button(board, bg="#b58863", command=move('e2'))
+e3=Button(board, bg='#f0d9b5', command=move('e3'))
+e4=Button(board, bg="#b58863", command=move('e4'))
+e5=Button(board, bg='#f0d9b5', command=move('e5'))
+e6=Button(board, bg="#b58863", command=move('e6'))
+e7=Button(board, bg='#f0d9b5', command=move('e7'))
+e8=Button(board, bg="#b58863", command=move('e8'))
+f8=Button(board, bg='#f0d9b5', command=move('f8'))
+f7=Button(board, bg="#b58863", command=move('f7'))
+f6=Button(board, bg='#f0d9b5', command=move('f6'))
+f5=Button(board, bg="#b58863", command=move('f5'))
+f4=Button(board, bg='#f0d9b5', command=move('f4'))
+f3=Button(board, bg="#b58863", command=move('f3'))
+f2=Button(board, bg='#f0d9b5', command=move('f2'))
+f1=Button(board, bg="#b58863", command=move('f1'))
+g1=Button(board, bg='#f0d9b5', command=move('g1'))
+g2=Button(board, bg="#b58863", command=move('g2'))
+g3=Button(board, bg='#f0d9b5', command=move('g3'))
+g4=Button(board, bg="#b58863", command=move('g4'))
+g5=Button(board, bg='#f0d9b5', command=move('g5'))
+g6=Button(board, bg="#b58863", command=move('g6'))
+g7=Button(board, bg='#f0d9b5', command=move('g7'))
+g8=Button(board, bg="#b58863", command=move('g8'))
+h8=Button(board, bg='#f0d9b5', command=move('h8'))
+h7=Button(board, bg="#b58863", command=move('h7'))
+h6=Button(board, bg='#f0d9b5', command=move('h6'))
+h5=Button(board, bg="#b58863", command=move('h5'))
+h4=Button(board, bg='#f0d9b5', command=move('h4'))
+h3=Button(board, bg="#b58863", command=move('h3'))
+h2=Button(board, bg='#f0d9b5', command=move('h2'))
+h1=Button(board, bg="#b58863", command=move('h1'))
+
+for i in case:
+    eval(i).place(relx=(eval(i[1])-1)*0.07+0.1, rely=(ord(i[0])-ord('a')+1)/10,relwidth=0.07, relheight=0.1)
+
+def coordonnees(bouton):
+    w='s'
+    c = bouton.winfo_name()
+    if len(c)==7:
+        return('a1')
+    else:
+        for i in liste:
+            if (eval(c[7:])-1)//8==ord(i)-ord('a'):
+                w=i
+        if w=='s':
+            w='h'
+        if (eval(c[7:])%8)!=0:
+            w+=(str(eval(c[7:])%8))
+        else:
+            w+='8'
+    return(str(w))
+
+
+
+
+
+
+for i in case:
+    print(coordonnees(eval(i)))
+
+
+board.mainloop()
