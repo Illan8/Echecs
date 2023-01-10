@@ -1,39 +1,68 @@
-echiquier=[[0]*8]*8
+from tkinter import *
 
+def coca(ch):
+    ca=[]
+    ca.append((eval(ch[1])-1))
+    ca.append(ord(ch[0])-ord('a'))
+    return ca
+
+def caco(list):
+    global liste
+    co=''
+    co+=liste[list[1]]
+    co+=str(list[0]+1)
+    return co
+
+enpassant=10
 
 class pion:
-    def __init__(self, y, x, couleur=blanc):
+    def __init__(self, y, x, couleur="blanc"):
         self.position=[y,x]
-        self.__initial=(y,x) # on sait pas ce qu'on va faire
+        self.initial=[y,x]
         self.couleur=couleur
 
     def mouvements(self):
         y=self.position[0]
         x=self.position[1]
         legal=[]
-        if self.couleur==blanc
+        if self.couleur=="noir":
             if y<7: #condition vrmt nécessaire ?
                 if echiquier[y+1][x]==0:
                     legal.append([y+1,x])
-                    if self.__position==self.initial and echiquier[y+2][x]==0:
+                    if self.position==self.initial and echiquier[y+2][x]==0:
                         legal.append([y+2,x])
-            if x!=0 and echiquier[y+1][x-1]!=0 and eval(echiquier[y+1][x-1]).couleur=='noir':
-                legal.append([y+1,x-1])
-            if x!=7 and echiquier[y+1][x+1]!=0 and eval(echiquier[y+1][x+1]).couleur=='noir':
-                legal.append([y+1,x+1])
+            if x!=0:
+                if echiquier[y+1][x-1]!=0 and echiquier[y+1][x-1].couleur=='blanc':
+                    legal.append([y+1,x-1])
+                if y==4 and enpassant==x-1:
+                    legal.append([y+1,x-1])
+
+            if x!=7:
+                if echiquier[y+1][x+1]!=0 and echiquier[y+1][x+1].couleur=='blanc':
+                    legal.append([y+1,x+1])
+                if y==4 and enpassant == x+1:
+                    legal.append([y+1,x+1])
+
             #prise en passant à coder
         else:
             if y>0: #condition vrmt nécessaire ?
                 if echiquier[y-1][x]==0:
                     legal.append([y-1,x])
-                    if self.__position==self.initial and echiquier[y-2][x]==0:
+                    if self.position==self.initial and echiquier[y-2][x]==0:
                         legal.append([y-2,x])
-            if x!=0 and echiquier[y-1][x-1]!=0 and eval(echiquier[y-1][x-1]).couleur=='blanc':
-                legal.append([y-1,x-1])
-            if x!=7 and echiquier[y-1][x+1]!=0 and eval(echiquier[y-1][x+1]).couleur=='blanc':
-                legal.append([y-1,x+1])
+            if x!=0 :
+                if echiquier[y-1][x-1]!=0 and echiquier[y-1][x-1].couleur=='noir':
+                    legal.append([y-1,x-1])
+                if y==3 and enpassant==x-1:
+                    legal.append([y-1,x-1])
+            if x!=7:
+                if echiquier[y-1][x+1]!=0 and echiquier[y-1][x+1].couleur=='noir':
+                    legal.append([y-1,x+1])
+                if y==3 and enpassant==x+1:
+                    legal.append([y-1,x+1])
+
         return(legal)
-        
+
     def menace(self):
         y=self.position[0]
         x=self.position[1]
@@ -42,9 +71,12 @@ class pion:
             Menace.append([y+1,x-1])
         if 7>x:
             Menace.append([y+1,x+1])
-            
-    
-    
+        return Menace
+
+
+
+
+
 
 
 
@@ -89,75 +121,77 @@ class dame:
         if y+i<=7 and echiquier[y+i][x].couleur!=self.couleur:
             legal.append([y+i,x])
         i=1
-        
-        
+
+
         while y+i<=7 and x+i<=7 and echiquier[y+i][x+i]==0:
                 legal.append([y+i,x+i])
                 i+=1
-        if y+i<=7 and x+i<=7 and eval(echiquier[y+i,x+i]).couleur!=self.couleur:
+        if y+i<=7 and x+i<=7 and echiquier[y+i][x+i].couleur!=self.couleur:
                 legal.append([y+i,x+i])
         i=1
         while y-i>=0 and x-i>=0 and echiquier[y-i][x-i]==0:
                 legal.append([y-i,x-i])
                 i+=1
-        if y-i>=0 and x-i>=0 and eval(echiquier[y-i,x-i]).couleur!=self.couleur:
+        if y-i>=0 and x-i>=0 and echiquier[y-i][x-i].couleur!=self.couleur:
                 legal.append([y-i,x-i])
         i=1
         while y+i<=7 and x-i>=0 and echiquier[y+i][x-i]==0:
                 legal.append([y+i,x-i])
                 i+=1
-        if y+i<=7 and x-i>=0 and eval(echiquier[y+i,x-i]).couleur!=self.couleur:
+        if y+i<=7 and x-i>=0 and echiquier[y+i][x-i].couleur!=self.couleur:
                 legal.append([y+i,x-i])
         i=1
         while y-i>=0 and x+i<=7 and echiquier[y-i][x+i]==0:
                 legal.append([y-i,x+i])
                 i+=1
-        if y-i>=0 and x+i<=7 and eval(echiquier[y-i,x+i]).couleur!=self.couleur:
+        if y-i>=0 and x+i<=7 and echiquier[y-i][x+i].couleur!=self.couleur:
                 legal.append([y-i,x+i])
         i=1
-        
+
         return(legal)
-               
+
 class fou:
-        def __init__(self, x, y, couleur):
+    def __init__(self, x, y, couleur):
         self.position=[y,x]
         self.couleur=couleur
-        
-        def mouvements(self):
-            y=self.position[0]
-            x=self.position[1]
-            legal=[]
-            i=1
-            while y+i<=7 and x+i<=7 and echiquier[y+i][x+i]==0:
-                    legal.append([y+i,x+i])
-                    i+=1
-            if y+i<=7 and x+i<=7 and eval(echiquier[y+i,x+i]).couleur!=self.couleur:
-                    legal.append([y+i,x+i])
-            i=1
-            while y-i>=0 and x-i>=0 and echiquier[y-i][x-i]==0:
-                    legal.append([y-i,x-i])
-                    i+=1
-            if y-i>=0 and x-i>=0 and eval(echiquier[y-i,x-i]).couleur!=self.couleur:
-                    legal.append([y-i,x-i])
-            i=1
-            while y+i<=7 and x-i>=0 and echiquier[y+i][x-i]==0:
-                    legal.append([y+i,x-i])
-                    i+=1
-            if y+i<=7 and x-i>=0 and eval(echiquier[y+i,x-i]).couleur!=self.couleur:
-                    legal.append([y+i,x-i])
-            i=1
-            while y-i>=0 and x+i<=7 and echiquier[y-i][x+i]==0:
-                    legal.append([y-i,x+i])
-                    i+=1
-            if y-i>=0 and x+i<=7 and eval(echiquier[y-i,x+i]).couleur!=self.couleur:
-                    legal.append([y-i,x+i])
-            i=1
-            
+
+    def mouvements(self):
+        y=self.position[0]
+        x=self.position[1]
+        legal=[]
+        i=1
+        while y+i<=7 and x+i<=7 and echiquier[y+i][x+i]==0:
+                legal.append([y+i,x+i])
+                i+=1
+        if y+i<=7 and x+i<=7 and echiquier[y+i][x+i].couleur!=self.couleur:
+                legal.append([y+i,x+i])
+        i=1
+        while y-i>=0 and x-i>=0 and echiquier[y-i][x-i]==0:
+                legal.append([y-i,x-i])
+                i+=1
+        if y-i>=0 and x-i>=0 and echiquier[y-i][x-i].couleur!=self.couleur:
+                legal.append([y-i,x-i])
+        i=1
+        while y+i<=7 and x-i>=0 and echiquier[y+i][x-i]==0:
+                legal.append([y+i,x-i])
+                i+=1
+        if y+i<=7 and x-i>=0 and echiquier[y+i][x-i].couleur!=self.couleur:
+                legal.append([y+i,x-i])
+        i=1
+        while y-i>=0 and x+i<=7 and echiquier[y-i][x+i]==0:
+                legal.append([y-i,x+i])
+                i+=1
+        if y-i>=0 and x+i<=7 and echiquier[y-i][x+i].couleur!=self.couleur:
+                legal.append([y-i,x+i])
+        i=1
+        return legal
+
 class tour:
     def __init__(self, x, y, couleur):
         self.position=[y,x]
         self.couleur=couleur
-            
+        self.moved=False
+
     def mouvements(self):
         y=self.position[0]
         x=self.position[1]
@@ -186,34 +220,731 @@ class tour:
             i+=1
         if y+i<=7 and echiquier[y+i][x].couleur!=self.couleur:
             legal.append([y+i,x])
-        i=1
-    #roque possible ?
-    
-    
+        legal.append
 
-               
+        #roque possible ?
+        return legal
+
+class cavalier:
+    def __init__(self, x, y, couleur):
+        self.position=[y,x]
+        self.couleur=couleur
+
+    def mouvements(self):
+        x=self.position[1]
+        y=self.position[0]
+        a=[2,-2]
+        legal=[]
+        for i in a:
+            for j in a:
+                c=x+i
+                u=int(y+(j/2))
+                if 0<=c<=7 and 0<=u<=7:
+                    if echiquier[u][c]==0:
+                        legal.append([u,c])
+                    elif echiquier[u][c].couleur!=self.couleur:
+                        legal.append([u,c])
+                c=int(x+(j/2))
+                u=y+i
+                if 0<=c<=7 and 0<=u<=7:
+                    if echiquier[u][c]==0:
+                        legal.append([u,c])
+                    elif echiquier[u][c].couleur!=self.couleur:
+                        legal.append([u,c])
+        return legal
+
+
+
 class roi:
     def __init__(self, x, y, couleur):
         self.position=[y,x]
         self.couleur=couleur
-               
+        self.moved=False
+
     def mouvements(self):
         y=self.position[0]
         x=self.position[1]
         legal=[]
-                   
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
+        for i in [-1, 0, 1]:
+            for j in [-1, 0, 1]:
+                if (i!=0 or j!=0) and 0<=y+i<=7 and 0<=x+j<=7:
+                    if echiquier[y+i][x+j]==0:
+                        legal.append([y+i, x+j])
+                    if echiquier[y+i][x+j]!=0 and echiquier[y+i][x+j].couleur != self.couleur:
+                        legal.append([y+i, x+j])
+        if self.couleur=='blanc':
+            for i in pieces_noires:
+                for j in legal:
+                    if type(i)!=roi and j in i.mouvements() :
+                        legal.remove(j)
+                    elif type(i)==roi and j in i.menace():
+                        legal.remove(j)
+
+
+#petit roque :
+        a=0
+        if self.couleur=='blanc' and  self.moved == False and tour_blanche_h.moved == False and echiquier[7][6]==0 and echiquier[7][5]==0 :
+            for i in pieces_noires :
+                if type(i)!= roi and ([7,5] in (i.mouvements())  or [7,6] in (i.mouvements())) :
+                    a+=1
+                if type(i)==roi and ([7,5] in (i.menace())  or [7,6] in (i.menace())):
+                    a+=1
+
+            for i in pions_noirs:
+                if ([7,5] in (i.menace())  or [7,6] in (i.menace())):
+                    a+=1
+
+            if a==0 :
+                legal.append([y,x+2])
+
+        if self.couleur=='noir' and self.moved == False and tour_noire_h.moved == False and echiquier[0][5]==0 and echiquier[0][6]==0 :
+            for i in pieces_blanches :
+                if type!=roi and ([0,5] in (i.mouvements())  and [0,6] in (i.mouvements())) :
+                    a+=1
+                if type==roi and ([0,5] in (i.menace())  and [0,6] in (i.menace())) :
+                    a+=1
+            for i in pions_blancs:
+                if ([0,5] in (i.menace())  and [0,6] in i.menace()):
+                    a+=1
+            if a==0 :
+                legal.append([y,x+2])
+
+    #grand roque :
+        b=0
+        if self.couleur=='blanc' and  self.moved == False and tour_blanche_a.moved == False :
+            if echiquier[7][1]==0 and echiquier[7][2]==0 and echiquier[7][3]==0:
+                for i in pieces_noires :
+                    if type(i)!=roi and ([7,2] in (i.mouvements()) or [7,3] in (i.mouvements())) :
+                        b+=1
+                    if type(i)== roi and ([7,3] in i.menace() or [7,2] in i.menace()):
+                        b+=1
+                for i in pions_noirs:
+                    if [7,3] in i.menace() or [7,2] in i.menace():
+                        b+=1
+
+                if b==0 :
+                    legal.append([y,x-2])
+        if self.couleur=='noir' and self.moved == False and tour_noire_a.moved == False :
+            if echiquier[0][1]==0 and echiquier[0][2]==0 and echiquier[0][3]:
+                for i in pieces_blanches :
+                    if type(i)!=roi and ([0,2] in (i.mouvements()) or [0,3] in (i.mouvements())) :
+                        b+=1
+                    if type(i)==roi and ([0,2] in (i.menace()) or [0,3] in (i.menace())):
+                        b+=1
+                for i in pions_blancs:
+                    if [0,2] in (i.menace()) or [0,3] in (i.menace()):
+                        b+=1
+                if b==0 :
+                    legal.append([y][x-2])
+
+
+        return legal
+
+
+    def menace(self):
+        y=self.position[0]
+        x=self.position[1]
+        legal=[]
+        for i in [-1, 0, 1]:
+            for j in [-1, 0, 1]:
+                if (i!=0 or j!=0) and 0<=y+i<=7 and 0<=x+j<=7:
+                    if echiquier[y+i][x+j]==0:
+                        legal.append([y+i, x+j])
+                    if echiquier[y+i][x+j]!=0 and echiquier[y+i][x+j].couleur != self.couleur:
+                        legal.append([y+i, x+j])
+        return legal
+
+
+
+
+
+
+
+Turn='blanc'
+
+
+pion_blanc_a=pion(6,0)
+pion_blanc_b=pion(6,1)
+pion_blanc_c=pion(6,2)
+pion_blanc_d=pion(6,3)
+pion_blanc_e=pion(6,4)
+pion_blanc_f=pion(6,5)
+pion_blanc_g=pion(6,6)
+pion_blanc_h=pion(6,7)
+
+pion_noir_a=pion(1,0, couleur='noir')
+pion_noir_b=pion(1,1, couleur='noir')
+pion_noir_c=pion(1,2, couleur='noir')
+pion_noir_d=pion(1,3, couleur='noir')
+pion_noir_e=pion(1,4, couleur='noir')
+pion_noir_f=pion(1,5, couleur='noir')
+pion_noir_g=pion(1,6, couleur='noir')
+pion_noir_h=pion(1,7, couleur='noir')
+
+pions_blancs={pion_blanc_a,pion_blanc_b,pion_blanc_c,pion_blanc_d,pion_blanc_e,pion_blanc_f,pion_blanc_g,pion_blanc_h}
+pions_noirs={pion_noir_a,pion_noir_b,pion_noir_c,pion_noir_d,pion_noir_e,pion_noir_f,pion_noir_g,pion_noir_h}
+
+tour_blanche_a=tour(0,7, 'blanc')
+tour_blanche_h=tour(7,7, 'blanc')
+dame_blanche=dame(3,7, 'blanc')
+fou_blanc_c=fou(2,7, 'blanc')
+fou_blanc_f=fou(5,7, 'blanc')
+cavalier_blanc_b=cavalier(1,7, 'blanc')
+cavalier_blanc_g=cavalier(6,7,'blanc')
+roi_blanc=roi(4,7,'blanc')
+
+tour_noire_a=tour(0,0, 'noir')
+tour_noire_h=tour(7,0, 'noir')
+dame_noire=dame(3,0, 'noir')
+fou_noir_c=fou(2,0, 'noir')
+fou_noir_f=fou(5,0, 'noir')
+cavalier_noir_b=cavalier(1,0, 'noir')
+cavalier_noir_g=cavalier(6,0,'noir')
+roi_noir=roi(4,0,'noir')
+
+
+
+pieces_blanches={tour_blanche_a,tour_blanche_h,dame_blanche,fou_blanc_c,fou_blanc_f,cavalier_blanc_b,cavalier_blanc_g,roi_blanc}
+pieces_noires={tour_noire_a,tour_noire_h,dame_noire,fou_noir_c,fou_noir_f,cavalier_noir_b,cavalier_noir_g,roi_noir}
+
+
+
+echiquier=[[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
+echiquier[7]=[tour_blanche_a,cavalier_blanc_b,fou_blanc_c,dame_blanche,roi_blanc,fou_blanc_f,cavalier_blanc_g,tour_blanche_h]
+echiquier[0]=[tour_noire_a,cavalier_noir_b,fou_noir_c,dame_noire,roi_noir,fou_noir_f,cavalier_noir_g,tour_noire_h]
+echiquier[6]=[pion_blanc_a,pion_blanc_b,pion_blanc_c,pion_blanc_d,pion_blanc_e,pion_blanc_f,pion_blanc_g,pion_blanc_h]
+echiquier[1]=[pion_noir_a,pion_noir_b,pion_noir_c,pion_noir_d,pion_noir_e,pion_noir_f,pion_noir_g,pion_noir_h]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def prom_tour_blanche():
+    ca = caco(c)
+    eval(ca)['text'] = '♖'
+    case5.config(state = DISABLED)
+    case6.config(state = DISABLED)
+    case7.config(state = DISABLED)
+    case8.config(state = DISABLED)
+    pions_blancs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = tour(c[1], c[0], 'blanc')
+    pieces_blanches.add(echiquier[c[0]][c[1]])
+
+
+
+def prom_cavalier_blanc():
+    ca = caco(c)
+    eval(ca)['text'] = '♘'
+    case5.config(state = DISABLED)
+    case6.config(state = DISABLED)
+    case7.config(state = DISABLED)
+    case8.config(state = DISABLED)
+    pions_blancs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = cavalier(c[1], c[0], 'blanc')
+    pieces_blanches.add(echiquier[c[0]][c[1]])
+
+def prom_dame_blanche():
+    ca = caco(c)
+    eval(ca)['text'] = '♕'
+    case5.config(state = DISABLED)
+    case6.config(state = DISABLED)
+    case7.config(state = DISABLED)
+    case8.config(state = DISABLED)
+    pions_blancs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = dame(c[1], c[0], 'blanc')
+    pieces_blanches.add(echiquier[c[0]][c[1]])
+
+def prom_fou_blanc():
+    ca = caco(c)
+    eval(ca)['text'] = '♗'
+    case5.config(state = DISABLED)
+    case6.config(state = DISABLED)
+    case7.config(state = DISABLED)
+    case8.config(state = DISABLED)
+    pions_blancs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = fou(c[1], c[0], 'blanc')
+    pieces_blanches.add(echiquier[c[0]][c[1]])
+
+def prom_tour_noire():
+    ca = caco(c)
+    eval(ca)['text'] = '♜'
+    case1.config(state = DISABLED)
+    case2.config(state = DISABLED)
+    case3.config(state = DISABLED)
+    case4.config(state = DISABLED)
+    pions_noirs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = tour(c[1], c[0], 'noir')
+    pieces_noires.add(echiquier[c[0]][c[1]])
+
+
+def prom_cavalier_noir():
+    ca = caco(c)
+    eval(ca)['text'] = '♞'
+    case1.config(state = DISABLED)
+    case2.config(state = DISABLED)
+    case3.config(state = DISABLED)
+    case4.config(state = DISABLED)
+    pions_noirs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = cavalier(c[1], c[0], 'noir')
+    pieces_noires.add(echiquier[c[0]][c[1]])
+
+def prom_dame_noire():
+    ca = caco(c)
+    eval(ca)['text'] = '♛'
+    case1.config(state = DISABLED)
+    case2.config(state = DISABLED)
+    case3.config(state = DISABLED)
+    case4.config(state = DISABLED)
+    pions_noirs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = dame(c[1], c[0], 'noir')
+    pieces_noires.add(echiquier[c[0]][c[1]])
+
+
+
+def prom_fou_noir():
+    ca = caco(c)
+    eval(ca)['text'] = '♝'
+    case1.config(state = DISABLED)
+    case2.config(state = DISABLED)
+    case3.config(state = DISABLED)
+    case4.config(state = DISABLED)
+    pions_noirs.remove(echiquier[c[0]][c[1]])
+    echiquier[c[0]][c[1]] = fou(c[1], c[0], 'noir')
+    pieces_noires.add(echiquier[c[0]][c[1]])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def Enpassant(enpassant):
+
+
+
+    if echiquier[Move[0][0]][Move[0][1]] in pions_blancs:
+        if Move[1] == [2, enpassant]:
+            pions_noirs.remove(echiquier[3][enpassant])
+            echiquier[3][enpassant]=0
+            eval(caco([3,enpassant]))['text']=''
+
+    if echiquier[Move[0][0]][Move[0][1]] in pions_noirs:
+        if Move[1] == [5, enpassant]:
+            pions_blancs.remove(echiquier[4][enpassant])
+            echiquier[4][enpassant]=0
+            eval(caco([4, enpassant]))['text']=''
+
+
+    if (echiquier[Move[0][0]][Move[0][1]] in pions_blancs) and (Move[1][0]==Move[0][0]-2) :
+        enpassant=Move[0][1]
+
+
+    elif (echiquier[Move[0][0]][Move[0][1]] in pions_noirs) and (Move[1][0]==Move[0][0]+2):
+        enpassant=Move[0][1]
+    else:
+        enpassant=10
+
+
+
+
+
+
+def check(roi):
+    a=0
+    if roi.couleur=='blanc':
+        for i in pieces_noires:
+            if roi.position in i.mouvements():
+                a+=1
+        for i in pions_noirs:
+            if roi.position in i.mouvements():
+                a+=1
+        if a!=0:
+            return True
+        else:
+            return False
+    if roi.couleur=='noir':
+        for i in pieces_blanches:
+            if roi.position in i.mouvements():
+                a+=1
+        for i in pions_blancs:
+            if roi.position in i.mouvements():
+                a+=1
+        if a!=0:
+            return True
+        else:
+            return False
+
+
+
+
+
+Move=[]
+
+def roque():
+
+# mouvts de la tour pour petit roque :
+
+    if type(echiquier[Move[1][0]][Move[1][1]])==roi and (Move[1][1]-Move[0][1])==2 :
+        if Turn=='blanc' and roi_blanc.position==[7,6]:
+            tour_blanche_h.position=[7,5]
+            echiquier[7][5]=tour_blanche_h
+            echiquier[7][7]=0
+            eval(caco([7,5]))['text']= '♖'
+            eval(caco([7,7]))['text']=''
+        elif Turn=='noir' and roi_noir.position==[0,5]:
+            tour_noire_h.position=[7,5]
+            echiquier[7][5]=tour_noire_h
+            echiquier[0][7]=0
+            eval(caco([0,5]))['text']= '♜'
+            eval(caco([0,7]))['text']= ''
+
+    # mouvts de la tour pour grand roque :
+
+    if type(echiquier[Move[1][0]][Move[1][1]])==roi and (Move[1][1]-Move[0][1])==2:
+        if Turn=='blanc' and roi_blanc.position==[7,2]:
+            tour_blanche_a.position=[7,3]
+            echiquier[7][3]=tour_blanche_a
+            echiquier[7][0]=0
+            eval(caco([7,3]))['text']= '♖'
+            eval(caco([7,0]))['text']=''
+        elif Turn=='noir' and roi_noir.position==[0,2]:
+            tour_noire_a.position=[0,3]
+            echiquier[0][3]=tour_noire_a
+            echiquier[0][0]=0
+            eval(caco([0,3]))['text']= '♜'
+            eval(caco([0,0]))['text']= ''
+
+
+
+
+
+
+def move(case):
+    global Move
+    global Turn
+    global pions_blancs
+    global pions_noirs
+    global pieces_blanches
+    global pieces_noires
+    global enpassant
+    couleurs=['blancs','noirs']
+    couleurs2= ['blanches','noires']
+
+    c=coca(case)
+    select=echiquier[c[0]][c[1]]
+    l=[]
+
+    if len(Move)==0 and select!=0:
+        if Turn==select.couleur:
+            Move.append(c)
+    elif len(Move)==1:
+        if Move[0]==c:
+            Move=[]
+        elif c in echiquier[Move[0][0]][Move[0][1]].mouvements():
+            Move.append(c)
+        else:
+            Move=[]
+    if len(Move)==2:
+        elt=echiquier[Move[1][0]][Move[1][1]]
+        if echiquier[Move[1][0]][Move[1][1]]!=0:
+            for i in couleurs:
+                if echiquier[Move[1][0]][Move[1][1]] in eval(f'pions_{i}'):
+                    eval(f'pions_{i}').remove(echiquier[Move[1][0]][Move[1][1]])
+            for i in couleurs2:
+                if echiquier[Move[1][0]][Move[1][1]] in eval(f'pieces_{i}'):
+                    eval(f'pieces_{i}').remove(echiquier[Move[1][0]][Move[1][1]])
+
+        Enpassant(enpassant)
+
+        if type(echiquier[Move[0][0]][Move[0][1]])==roi or type(echiquier[Move[0][0]][Move[0][1]])==tour :
+            echiquier[Move[0][0]][Move[0][1]].moved = True
+
+
+
+
+        if type(echiquier[c[0]][c[1]]) == pion and echiquier[c[0]][c[1]].position[0] == 7:
+
+            case1.config(state = NORMAL)
+            case2.config(state = NORMAL)
+            case3.config(state = NORMAL)
+            case4.config(state = NORMAL)
+
+        if type(echiquier[c[0]][c[1]]) == pion and echiquier[c[0]][c[1]].position[0] == 0:
+            case5.config(state = NORMAL)
+            case6.config(state = NORMAL)
+            case7.config(state = NORMAL)
+            case8.config(state = NORMAL)
+
+
+
+
+        (echiquier[Move[1][0]][Move[1][1]])=(echiquier[Move[0][0]][Move[0][1]])
+        echiquier[Move[0][0]][Move[0][1]].position=c
+        echiquier[Move[0][0]][Move[0][1]]=0
+        print(roi_blanc.position)
+        print(type(echiquier[Move[0][0]][Move[0][1]])==roi)
+        print (Move[1][1]-Move[0][1]==2)
+        print(Turn)
+        roque()
+
+        if not check(eval(f'roi_{Turn}')):
+            eval(case)['text']=eval(caco(Move[0]))['text']
+            eval(caco(Move[0]))['text']=''
+            Move=[]
+
+            if Turn=='blanc':
+                Turn='noir'
+            elif Turn=='noir':
+                Turn='blanc'
+        else:
+            echiquier[Move[0][0]][Move[0][1]]=echiquier[Move[1][0]][Move[1][1]]
+            echiquier[Move[1][0]][Move[1][1]]=elt
+            echiquier[Move[0][0]][Move[0][1]].position=Move[0]
+
+            if elt!=0 and type(elt)==pion:
+                if elt.couleur=='blanc':
+                    pions_blancs.append(elt)
+                else:
+                    pions_noirs.append(elt)
+            elif elt!=0:
+                if elt.couleur=='noir':
+                    pions_noirs.append(elt)
+                else:
+                    pions_blancs.append(elt)
+            Move=[Move[0]]
+
+
+
+
+
+def select(case):
+    i=case[0]
+    y=8-int(case[1])
+    x=ord(i)-ord('a')
+    return [y,x]
+
+
+
+
+
+
+
+
+
+board = Tk()
+board.title('Echecs')
+board.geometry("1155x808")
+case=[]
+liste=['a','b','c','d','e','f','g','h']
+for i in liste:
+    for j in range(8):
+        d=str(j+1)
+        c=f"{i}{d}"
+        case.append(c)
+
+
+case1 = Button (board, text = "Tour noire", state = DISABLED, command = prom_tour_noire)
+case2 = Button (board, text = "Cavalier noir", state = DISABLED, command = prom_cavalier_noir)
+case3 = Button (board, text = "dame noire", state = DISABLED, command = prom_dame_noire)
+case4 = Button (board, text = "fou noir", state = DISABLED, command = prom_fou_noir)
+case1.place(relx=0, rely=0.7)
+case2.place(relx=0, rely=0.75)
+case3.place(relx=0, rely=0.8)
+case4.place(relx=0, rely=0.85)
+
+
+
+a1=Button(board, text='♜', font=(UnicodeDecodeError, 33), bg='#f0d9b5',command=lambda:move('a1'))
+a2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg="#b58863",command=lambda:move('a2'))
+a3=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33),command=lambda:move('a3'))
+a4=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('a4'))
+a5=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('a5'))
+a6=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('a6'))
+a7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('a7'))
+a8=Button(board, text='♖', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('a8'))
+b8=Button(board, text='♘', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('b8'))
+b7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('b7'))
+b6=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('b6'))
+b5=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('b5'))
+b4=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('b4'))
+b3=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('b3'))
+b2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('b2'))
+b1=Button(board, text='♞', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('b1'))
+c1=Button(board, text='♝', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('c1'))
+c2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('c2'))
+c3=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('c3'))
+c4=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('c4'))
+c5=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('c5'))
+c6=Button(board, bg="#b58863", font=(UnicodeDecodeError, 33),command=lambda:move('c6'))
+c7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('c7'))
+c8=Button(board, text='♗', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('c8'))
+d8=Button(board, text='♕', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('d8'))
+d7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('d7'))
+d6=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('d6'))
+d5=Button(board, bg="#b58863", font=(UnicodeDecodeError, 33),command=lambda:move('d5'))
+d4=Button(board, bg='#f0d9b5', font=(UnicodeDecodeError, 33),command=lambda:move('d4'))
+d3=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('d3'))
+d2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('d2'))
+d1=Button(board, text='♛', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('d1'))
+e1=Button(board, text='♚', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('e1'))
+e2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('e2'))
+e3=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('e3'))
+e4=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('e4'))
+e5=Button(board, bg='#f0d9b5', font=(UnicodeDecodeError, 33),command=lambda:move('e5'))
+e6=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('e6'))
+e7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('e7'))
+e8=Button(board, text='♔', font=(UnicodeEncodeError, 33), bg="#b58863", command=lambda:move('e8'))
+f8=Button(board, text='♗', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('f8'))
+f7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('f7'))
+f6=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('f6'))
+f5=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('f5'))
+f4=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('f4'))
+f3=Button(board, bg="#b58863", font=(UnicodeDecodeError, 33),command=lambda:move('f3'))
+f2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('f2'))
+f1=Button(board, text='♝', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('f1'))
+g1=Button(board, text='♞', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('g1'))
+g2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('g2'))
+g3=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('g3'))
+g4=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('g4'))
+g5=Button(board, bg='#f0d9b5', font=(UnicodeDecodeError, 33),command=lambda:move('g5'))
+g6=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('g6'))
+g7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('g7'))
+g8=Button(board, text='♘', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('g8'))
+h8=Button(board, text='♖', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('h8'))
+h7=Button(board, text='♙', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('h7'))
+h6=Button(board, bg='#f0d9b5',font=(UnicodeDecodeError, 33), command=lambda:move('h6'))
+h5=Button(board, bg="#b58863",font=(UnicodeDecodeError, 33), command=lambda:move('h5'))
+h4=Button(board, bg='#f0d9b5', font=(UnicodeDecodeError, 33),command=lambda:move('h4'))
+h3=Button(board, bg="#b58863", font=(UnicodeDecodeError, 33),command=lambda:move('h3'))
+h2=Button(board, text='♟', font=(UnicodeDecodeError, 33), bg='#f0d9b5', command=lambda:move('h2'))
+h1=Button(board, text='♜', font=(UnicodeDecodeError, 33), bg="#b58863", command=lambda:move('h1'))
+
+for i in case:
+    eval(i).place(rely=(eval(i[1])-1)*0.1+0.1, relx=(ord(i[0])-ord('a'))*0.07+0.1,relheight=0.1, relwidth=0.07)
+
+def coordonnees(bouton):
+    w='s'
+    c = bouton.winfo_name()
+    if len(c)==7:
+        return('a1')
+    else:
+        for i in liste:
+            if (eval(c[7:])-1)%8==ord(i)-ord('a'):
+                w=i
+        if w=='s':
+            w='h'
+        if (eval(c[7:])//8)!=0:
+            w+=(str(eval(c[7:])//8))
+        else:
+            w+='1'
+    return(str(w))
+
+
+
+
+board.mainloop()
+
+
